@@ -2,4 +2,6 @@
 
 set -ex
 
-/usr/local/bin/wrapdocker
+/usr/local/bin/wrapdocker &
+
+exec $@

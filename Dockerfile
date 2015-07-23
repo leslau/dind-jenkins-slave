@@ -44,6 +44,3 @@ RUN usermod -a -G docker jenkins
 # Added script to start wrapdocker and run it on entrypoint
 ADD start-wrapdocker.sh /
 ENTRYPOINT ["/start-wrapdocker.sh"]
-
-# Default CMD opens bash
-CMD ["/bin/bash"]
