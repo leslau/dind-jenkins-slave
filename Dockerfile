@@ -28,6 +28,10 @@ ENV DOCKER_VERSION 1.7.1
 # Install Docker from Docker Inc. repositories.
 RUN apt-get update && apt-get install -y lxc-docker=$DOCKER_VERSION && rm -rf /var/lib/apt/lists/*
 
+# Instal docker-compose from https://github.com/docker/compose
+RUN curl -L https://github.com/docker/compose/releases/download/1.3.3/docker-compose-`uname -s`-`uname -m` > /usr/local/bin/docker-compose \
+    && chmod +x /usr/local/bin/docker-compose
+
 ADD wrapdocker /usr/local/bin/wrapdocker
 RUN chmod +x /usr/local/bin/wrapdocker
 VOLUME /var/lib/docker
@@ -37,7 +41,9 @@ VOLUME /var/lib/docker
 # group. Needed to access the docker daemon's unix socket.
 RUN usermod -a -G docker jenkins
 
+# Added script to start wrapdocker and run it on entrypoint
+ADD start-wrapdocker.sh /
+ENTRYPOINT ["/start-wrapdocker.sh"]
 
-# place the jenkins slave startup script into the container
-ADD jenkins-slave-startup.sh /
-CMD ["/jenkins-slave-startup.sh"]
+# Default CMD opens bash
+CMD ["/bin/bash"]
